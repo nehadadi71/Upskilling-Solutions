@@ -1,0 +1,202 @@
+/* ========== Global Reset and Body Styles ========== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background: url('background.jpg') no-repeat center center fixed;
+  background-size: cover;
+  background-color: #f0f0f0;
+  font-family: 'Roboto', sans-serif;
+  color: #333;
+  line-height: 1.6;
+  padding: 10px;
+}
+
+/* ========== Typography ========== */
+h1, h2, h3 {
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+h2 {
+  background: linear-gradient(to right, #2a5d84, #6db3f2);
+  color: white;
+  padding: 10px;
+  border-radius: 5px;
+  text-transform: uppercase;
+}
+
+/* ========== Paragraphs ========== */
+p {
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  text-align: justify;
+  margin-bottom: 10px;
+}
+
+/* ========== Navigation ========== */
+nav {
+  background-color: rgba(0, 0, 0, 0.8);
+  padding: 12px;
+  text-align: center;
+  border-radius: 5px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
+  font-weight: bold;
+  transition: color 0.3s;
+}
+
+nav a:hover {
+  text-decoration: underline;
+  color: #ffd700;
+}
+
+/* ========== Welcome Banner ========== */
+#welcomeBanner {
+  padding: 20px;
+  background-color: #007BFF;
+  color: white;
+  margin-bottom: 20px;
+  border-radius: 5px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* ========== Highlight Text ========== */
+.highlight {
+  background-color: yellow;
+  font-weight: bold;
+}
+
+/* ========== Table and Gallery ========== */
+table.gallery {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.gallery img {
+  border: 2px solid #ccc;
+  width: 100%;
+  max-width: 150px;
+  height: auto;
+  transition: transform 0.3s;
+}
+
+.gallery img:hover {
+  transform: scale(1.05);
+}
+
+th, td {
+  border: 1px solid #ccc;
+  padding: 8px;
+  text-align: center;
+}
+
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+/* ========== Forms ========== */
+form input, form select, form textarea {
+  width: 95%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+form input:focus, form select:focus, form textarea:focus {
+  outline: 2px solid #007BFF;
+  background-color: #eef6ff;
+}
+
+form button, form input[type="submit"] {
+  background-color: #28a745;
+  color: white;
+  padding: 10px 25px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s;
+}
+
+form button:hover, form input[type="submit"]:hover {
+  background-color: #218838;
+}
+
+/* ========== Event Card Example ========== */
+.eventCard {
+  border: 1px solid #ccc;
+  padding: 15px;
+  margin: 10px 0;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* ========== Link Styling ========== */
+a:link { color: #007BFF; }
+a:visited { color: purple; }
+a:hover { color: #0056b3; }
+a:active { color: red; }
+
+/* ========== List Styling ========== */
+ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+ul li {
+  margin: 5px 0;
+  padding-left: 15px;
+  position: relative;
+}
+
+ul li::before {
+  content: "•";
+  color: #007BFF;
+  position: absolute;
+  left: 0;
+}
+
+/* ========== News Section Columns ========== */
+.news-section {
+  column-count: 2;
+  column-gap: 30px;
+  column-rule: 1px solid gray;
+  margin: 20px;
+}
+
+/* ========== Media Queries ========== */
+@media screen and (max-width: 768px) {
+  nav a {
+    display: block;
+    margin: 10px 0;
+  }
+
+  body, p {
+    font-size: 90%;
+  }
+
+  img {
+    width: 100%;
+    height: auto;
+  }
+
+  .news-section {
+    column-count: 1;
+  }
+
+  table.gallery td {
+    display: block;
+    width: 100%;
+  }
+}
