@@ -1,0 +1,184 @@
+-- Question 1
+SELECT e.title, e.city, e.start_date
+FROM Events e
+JOIN Registrations r ON e.event_id = r.event_id
+JOIN Users u ON u.user_id = r.user_id
+WHERE e.status = 'upcoming' AND e.city = u.city
+ORDER BY e.start_date;
+
+-- Question 2
+SELECT e.title, AVG(f.rating) AS avg_rating
+FROM Events e
+JOIN Feedback f ON e.event_id = f.event_id
+GROUP BY e.event_id
+HAVING COUNT(f.feedback_id) >= 10
+ORDER BY avg_rating DESC;
+
+-- Question 3
+SELECT u.full_name, u.email
+FROM Users u
+WHERE NOT EXISTS (
+  SELECT 1 FROM Registrations r
+  WHERE r.user_id = u.user_id AND r.registration_date >= CURDATE() - INTERVAL 90 DAY
+);
+
+-- Question 4
+SELECT e.event_id, e.title, COUNT(s.session_id) AS session_count
+FROM Events e
+JOIN Sessions s ON e.event_id = s.event_id
+WHERE TIME(s.start_time) BETWEEN '10:00:00' AND '12:00:00'
+GROUP BY e.event_id;
+
+-- Question 5
+SELECT city, COUNT(DISTINCT user_id) AS user_count
+FROM Users
+GROUP BY city
+ORDER BY user_count DESC
+LIMIT 5;
+
+-- Question 6
+SELECT e.title,
+  SUM(CASE WHEN r.resource_type = 'pdf' THEN 1 ELSE 0 END) AS pdfs,
+  SUM(CASE WHEN r.resource_type = 'image' THEN 1 ELSE 0 END) AS images,
+  SUM(CASE WHEN r.resource_type = 'link' THEN 1 ELSE 0 END) AS links
+FROM Events e
+LEFT JOIN Resources r ON e.event_id = r.event_id
+GROUP BY e.event_id;
+
+-- Question 7
+SELECT u.full_name, e.title, f.comments, f.rating
+FROM Feedback f
+JOIN Users u ON f.user_id = u.user_id
+JOIN Events e ON f.event_id = e.event_id
+WHERE f.rating < 3;
+
+-- Question 8
+SELECT e.title, COUNT(s.session_id) AS session_count
+FROM Events e
+LEFT JOIN Sessions s ON e.event_id = s.event_id
+WHERE e.status = 'upcoming'
+GROUP BY e.event_id;
+
+-- Question 9
+SELECT u.full_name, COUNT(e.event_id) AS total_events,
+  SUM(e.status = 'upcoming') AS upcoming,
+  SUM(e.status = 'completed') AS completed,
+  SUM(e.status = 'cancelled') AS cancelled
+FROM Users u
+JOIN Events e ON u.user_id = e.organizer_id
+GROUP BY u.user_id;
+
+-- Question 10
+SELECT e.title
+FROM Events e
+JOIN Registrations r ON e.event_id = r.event_id
+LEFT JOIN Feedback f ON e.event_id = f.event_id
+WHERE f.feedback_id IS NULL
+GROUP BY e.event_id;
+
+-- Question 11
+SELECT registration_date, COUNT(*) AS user_count
+FROM Users
+WHERE registration_date >= CURDATE() - INTERVAL 7 DAY
+GROUP BY registration_date;
+
+-- Question 12
+SELECT e.title, COUNT(s.session_id) AS session_count
+FROM Events e
+JOIN Sessions s ON e.event_id = s.event_id
+GROUP BY e.event_id
+HAVING session_count = (
+  SELECT MAX(session_count) FROM (
+    SELECT COUNT(session_id) AS session_count
+    FROM Sessions
+    GROUP BY event_id
+  ) AS counts
+);
+
+-- Question 13
+SELECT e.city, AVG(f.rating) AS avg_rating
+FROM Events e
+JOIN Feedback f ON e.event_id = f.event_id
+GROUP BY e.city;
+
+-- Question 14
+SELECT e.title, COUNT(r.registration_id) AS total_regs
+FROM Events e
+JOIN Registrations r ON e.event_id = r.event_id
+GROUP BY e.event_id
+ORDER BY total_regs DESC
+LIMIT 3;
+
+-- Question 15
+SELECT s1.event_id, s1.title AS session1, s2.title AS session2
+FROM Sessions s1
+JOIN Sessions s2 ON s1.event_id = s2.event_id AND s1.session_id < s2.session_id
+WHERE s1.start_time < s2.end_time AND s1.end_time > s2.start_time;
+
+-- Question 16
+SELECT u.full_name, u.email
+FROM Users u
+WHERE registration_date >= CURDATE() - INTERVAL 30 DAY
+AND NOT EXISTS (
+  SELECT 1 FROM Registrations r WHERE r.user_id = u.user_id
+);
+
+-- Question 17
+SELECT speaker_name, COUNT(*) AS session_count
+FROM Sessions
+GROUP BY speaker_name
+HAVING session_count > 1;
+
+-- Question 18
+SELECT e.title
+FROM Events e
+LEFT JOIN Resources r ON e.event_id = r.event_id
+WHERE r.resource_id IS NULL;
+
+-- Question 19
+SELECT e.title, COUNT(r.registration_id) AS total_regs, AVG(f.rating) AS avg_rating
+FROM Events e
+LEFT JOIN Registrations r ON e.event_id = r.event_id
+LEFT JOIN Feedback f ON e.event_id = f.event_id
+WHERE e.status = 'completed'
+GROUP BY e.event_id;
+
+-- Question 20
+SELECT u.full_name, COUNT(DISTINCT r.event_id) AS attended, COUNT(DISTINCT f.feedback_id) AS feedbacks
+FROM Users u
+LEFT JOIN Registrations r ON u.user_id = r.user_id
+LEFT JOIN Feedback f ON u.user_id = f.user_id
+GROUP BY u.user_id;
+
+-- Question 21
+SELECT u.full_name, COUNT(f.feedback_id) AS feedbacks
+FROM Users u
+JOIN Feedback f ON u.user_id = f.user_id
+GROUP BY u.user_id
+ORDER BY feedbacks DESC
+LIMIT 5;
+
+-- Question 22
+SELECT user_id, event_id, COUNT(*) AS dup_count
+FROM Registrations
+GROUP BY user_id, event_id
+HAVING dup_count > 1;
+
+-- Question 23
+SELECT DATE_FORMAT(registration_date, '%Y-%m') AS month, COUNT(*) AS reg_count
+FROM Registrations
+WHERE registration_date >= CURDATE() - INTERVAL 12 MONTH
+GROUP BY month
+ORDER BY month;
+
+-- Question 24
+SELECT e.title, AVG(TIMESTAMPDIFF(MINUTE, s.start_time, s.end_time)) AS avg_duration
+FROM Events e
+JOIN Sessions s ON e.event_id = s.event_id
+GROUP BY e.event_id;
+
+-- Question 25
+SELECT e.title
+FROM Events e
+LEFT JOIN Sessions s ON e.event_id = s.event_id
+WHERE s.session_id IS NULL;
